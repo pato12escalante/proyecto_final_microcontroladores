@@ -261,6 +261,7 @@ void leer_tecla_mas(){
             contador=0;
             contador2=0;
             contador3=0;
+            contador4=0;
         }
       
 }
