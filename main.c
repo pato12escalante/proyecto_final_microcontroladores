@@ -70,6 +70,7 @@ void mostrar_temperatura(){
 
 
 void modo_desarmado(){
+        pwmON(250, 29);
         LCD_Set_Cursor(0,0); 
         LCD_putrs("             ");
         tecla_oprimida=000;
@@ -90,6 +91,7 @@ void modo_desarmado(){
     
     
 void esperar_on(){
+        pwmON(250, 29);
         LCD_Set_Cursor(0,0); 
         LCD_putrs("             ");
         digitalWrite(led_rojo, LOW);
@@ -97,7 +99,7 @@ void esperar_on(){
         LCD_Set_Cursor(1,0); 
         LCD_putrs("CAJA DESARMADA");
         LCD_Set_Cursor(2,0); 
-        LCD_putrs("TECLA ON PARA ARMAR");
+        LCD_putrs("TECLA * PARA ARMAR");
         
         tecla_oprimida=keypadread();
         if(tecla_oprimida==44){
@@ -113,6 +115,7 @@ void esperar_on(){
 }
 
 void modo_armado(){
+    pwmON(250, 46);
     digitalWrite(led_rojo, HIGH);
     digitalWrite(led_verde, LOW);
     LCD_Set_Cursor(1,0); 
@@ -131,7 +134,6 @@ void modo_armado(){
         serialout('T');
         serialout('A');
         serialout(' ');
-        pwmON(250, 29);
         flag2=1;
         flag1=0;
         flag3=0;
@@ -310,13 +312,6 @@ void main() {
         puerta=digitalRead(switchh);
         if(flag2==1 && flag1==0 && flag3==0){
             alarma_8seg();
-        }
-        
-        if(puerta==1){
-            pwmON(250, 46);
-        }
-        if(puerta==0){
-            pwmON(250, 29);
         }
     
     }
