@@ -145,7 +145,7 @@ void pinMode(char terminal, char mode){
 
 //-----ANALOG---
 void ADCinit(int Canal){
-    ADCON2 = 0b10000100; //JustificaciÛn a la derecha / Reloj de conversiÛn FOSC/4
+    ADCON2 = 0b10000100; //Justificaci√≥n a la derecha / Reloj de conversi√≥n FOSC/4
     
     switch(Canal){
         case 1:
@@ -413,15 +413,23 @@ void printNumber(unsigned int num){
 
 
 //------MATRIX KEYBOARD-----
-volatile unsigned char *punteroaux0;  //AGREGARLO TAMBI…N EN ARCHIVO .h
-volatile unsigned char *punteroaux1; //AGREGARLO TAMBI…N EN ARCHIVO .h
+volatile unsigned char *punteroaux0;  //AGREGARLO TAMBI√âN EN ARCHIVO .h
+volatile unsigned char *punteroaux1; //AGREGARLO TAMBI√âN EN ARCHIVO .h
 char valor[4][4]={{0,0,0,0},
                       {0,0,0,0},
                       {0,0,0,0},
                       {0,0,0,0}};
-char tecla[4][4]={ {7,8,9,11},
+
+//4x4 KEYPAD FOR PROTEUS
+//char tecla[4][4]={ {7,8,9,11},
+//                   {4,5,6,22},
+//                   {1,2,3,33},
+//                   {44,0,55,66}};
+
+//REAL 4x4 KEYPAD
+char tecla[4][4]={ {1,2,3,11},
                    {4,5,6,22},
-                   {1,2,3,33},
+                   {7,8,9,33},
                    {44,0,55,66}};
 
 void keypad4x4init(char puerto){  
@@ -441,7 +449,7 @@ char keypadread(){
         
             *punteroaux0 = 1;
             __delay_ms(5);    
-            valor [0][0] = (*punteroaux1 & 0b00010000) > 0; /*Devuelve cero si la condiciÛn es falsa o 1 si es verdadera*/
+            valor [0][0] = (*punteroaux1 & 0b00010000) > 0; /*Devuelve cero si la condici√≥n es falsa o 1 si es verdadera*/
             valor [0][1] = (*punteroaux1 & 0b00100000) > 0;
             valor [0][2] = (*punteroaux1 & 0b01000000) > 0;
             valor [0][3] = (*punteroaux1 & 0b10000000) > 0;
@@ -503,16 +511,16 @@ void __interrupt() ISR(void) {
 
 void tmr0init(char time){
     INTCONbits.GIE = 1; // habilitar las interrupciones globales (configurar PEIE = 0)
-    INTCONbits.PEIE = 0; // Deshablitar Interrupciones de perifÈricos.
-    INTCONbits.TMR0IE = 1; //Habilitar interrupciÛn por desbordamiento de TMR0
+    INTCONbits.PEIE = 0; // Deshablitar Interrupciones de perif√©ricos.
+    INTCONbits.TMR0IE = 1; //Habilitar interrupci√≥n por desbordamiento de TMR0
     INTCONbits.INT0IE = 0; // Deshabilitar interrupciones externas.
-    INTCONbits.RBIE = 0; //Deshabilitar interrupciÛn por puerto RB
+    INTCONbits.RBIE = 0; //Deshabilitar interrupci√≥n por puerto RB
     INTCONbits.TMR0IF =0; // Limpiar la bandera de desbordamiento de TMR0
     RCONbits.IPEN = 0; // Deshabilitar prioridades en las interrupciones
     T0CONbits.TMR0ON = 1; // Habilitar tmr0
     T0CONbits.T08BIT = 1; //Configurar timer a 8 bits (puede ser de 16 bits)
     T0CONbits.T0CS = 0; // Seleccionar que el timer0 se incrementa por ciclo de reloj interno
-    T0CONbits.PSA = 0; // Utilizar un prescaler (para hacer m·s largo el timpo de cuenta del
+    T0CONbits.PSA = 0; // Utilizar un prescaler (para hacer m√°s largo el timpo de cuenta del
 //timer).
 //Los siguientes 3 bits controlan el preescaler, en este caso 1:256
     T0CONbits.T0PS0 = 1;
@@ -625,12 +633,12 @@ SPBRG = 51;
 TXREG = 0b01110111;
 }
 //-----------------------------------------------------
-//FUNCI”N PARA ENVIAR UN CARACTER (C”DIGO ASCII)
-//POR PUERTO SERIAL. TIENE UN ⁄NICO ARGUMENTO QUE ES
-//EL N⁄MERO DE CARACTER QUE SE DESEA ENVIAR, O EL PROPIO
+//FUNCI√ìN PARA ENVIAR UN CARACTER (C√ìDIGO ASCII)
+//POR PUERTO SERIAL. TIENE UN √öNICO ARGUMENTO QUE ES
+//EL N√öMERO DE CARACTER QUE SE DESEA ENVIAR, O EL PROPIO
 //CARACTER ENTRE COMILLAS SIMPLES. POR EJEMPLO, ES EQUIVALENTE
 //serialout(48); y serialout('0');
-//EN AMBOS CASOS SE ENVIAR¡ EL CARACTER "0";
+//EN AMBOS CASOS SE ENVIAR√Å EL CARACTER "0";
 
 void serialout(char datax){
 TXSTAbits.TXEN = 1;
